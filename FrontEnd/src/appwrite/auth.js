@@ -2,7 +2,8 @@ import conf from '../conf/conf.js';
 // import { Client, Account, ID } from "appwrite";
 
 import axios from 'axios';
-const API_BASE_URL = "http://localhost:8000/api/v1/users"
+// const API_BASE_URL = "http://localhost:8000/api/v1/users"
+const API_BASE_URL = "https://post-hive-backend.vercel.app/users"
 
 
 export class AuthService {
