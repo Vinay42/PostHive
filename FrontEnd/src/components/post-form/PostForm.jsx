@@ -257,7 +257,7 @@ export default function PostForm({ post }) {
             featuredImg: post?.featuredImg || "",
         },
     });
-    console.log(post)
+    // console.log(post)
 
     const navigate = useNavigate();
 
@@ -281,18 +281,22 @@ export default function PostForm({ post }) {
             let response;
             if (post) {
                 response = await service.updatePost(post.slug, formData);
-                console.log("Post updated successfully");
+                // console.log("Post updated successfully");
+                if (response) {
+                    navigate("/");
+                }
                 // console.log(response);
             } else {
                 // console.log(formData)
                 response = await service.createPost(formData);
                 // console.log(response)
                 console.log("Post created successfully");
+                if (response) {
+                    navigate(`/post/${response.slug}`);
+                }
             }
 
-            if (response) {
-                navigate(`/post/${response.slug}`);
-            }
+            
         } catch (error) {
             console.error("Form submission error:", error);
             // You can add your own error handling here

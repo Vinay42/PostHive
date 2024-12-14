@@ -312,13 +312,13 @@
 
 import axios from 'axios';
 
-// const API_BASE_URL = "http://localhost:8000/api/v1/post";
-const API_BASE_URL = "https://post-hive-backend.vercel.app/post";
+const API_BASE_URL = "http://localhost:8000/api/v1/post";
+const API_BASE_URL_2 = "https://post-hive-backend.vercel.app/post";
 
 export class Service {
     constructor() {
         this.axios = axios.create({
-            baseURL: API_BASE_URL,
+            baseURL: API_BASE_URL,API_BASE_URL_2,
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json'
@@ -374,13 +374,13 @@ export class Service {
         // console.log(req.file)
         // console.log(req.user)
         try {
-            console.log(formData)
+            // console.log(formData)
             const response = await this.axios.post('/posts', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
             });
-            console.log(response)
+            // console.log(response)
             return response.data;
         } catch (error) {
             console.error("Create post error:", error);
@@ -438,30 +438,47 @@ export class Service {
         }
     }
 
-    async getPosts(page = 1, limit = 10, search = '') {
-        try {
-            const params = new URLSearchParams({
-                page: page.toString(),
-                limit: limit.toString()
-            });
+    // async getPosts(page = 1, limit = 10, search = '') {
+    //     try {
+    //         const params = new URLSearchParams({
+    //             page: page.toString(),
+    //             limit: limit.toString()
+    //         });
 
-            if (search) {
-                params.append('search', search);
+    //         if (search) {
+    //             params.append('search', search);
+    //         }
+
+    //         const response = await this.axios.get(`/posts?${params.toString()}`);
+    //         return response.data;
+    //     } catch (error) {
+    //         console.error("Get posts error:", error);
+    //         throw error;
+    //     }
+    // }
+
+    async getPosts() {
+                try {
+                    const response = await this.axios.get("/posts", {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+        
+                    // Return the fetched post data
+                    return response.data;
+        
+                } catch (error) {
+                    console.log("Appwrite serive :: getPost :: error", error)
+                    return false
+                }
             }
-
-            const response = await this.axios.get(`/posts?${params.toString()}`);
-            return response.data;
-        } catch (error) {
-            console.error("Get posts error:", error);
-            throw error;
-        }
-    }
 
     async getUserPosts() {
         try {
-            console.log("at GetuserPosts")
+            // console.log("at GetuserPosts")
             const response = await this.axios.get("/my-posts");
-            console.log(response.data)
+            // console.log(response.data)
             return response.data;
         } catch (error) {
             console.error("Get user posts error:", error);

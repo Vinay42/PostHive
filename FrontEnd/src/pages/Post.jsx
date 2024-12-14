@@ -14,7 +14,13 @@ export default function Post() {
     const userId = userData?.userData?._id;
     // console.log("userdata :::: ",userData.userData._id)
     // console.log(post.userId)
-    const isAuthor = post && userId ? post.userId === userData.userData._id : false;
+    let isAuthor
+    if(userData?.userData?.isAdmin){
+        isAuthor= true
+    }else{
+        isAuthor = post && userId  ? post.userId === userData.userData._id : false;
+    }
+    
     // console.log(isAuthor)
     // console.log(userData)
 

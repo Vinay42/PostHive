@@ -12,7 +12,7 @@ function AllPosts() {
                 const response = await appwriteService.getUserPosts();
                 if (response) {
                     setPosts(response);
-                    console.log(posts)
+                    // console.log(posts)
                 }
             } catch (error) {
                 console.error("Error fetching posts:", error);
