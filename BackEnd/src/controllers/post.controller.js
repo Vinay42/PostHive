@@ -5,6 +5,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { v2 as cloudinary } from 'cloudinary';
 
 // const createPost = asyncHandler(async (req, res) => {
 //   const { title, content,status } = req.body;
@@ -350,10 +351,10 @@ const deletePost = asyncHandler(async (req, res) => {
     const { slug } = req.params;
     const userId = req.user._id;
     
-    console.log(slug)
+    // console.log(slug)
 
     const post = await Post.findOne({ slug });
-    console.log(post)
+    // console.log(post)
     if (!post) {
         throw new ApiError(404, "Post not found");
     }
@@ -362,11 +363,25 @@ const deletePost = asyncHandler(async (req, res) => {
         throw new ApiError(403, "Not authorized to delete this post");
     }
 
+    const deleteFromCloudinary = async (publicId) => {
+
+        try {
+            const result = await cloudinary.uploader.destroy(publicId);
+            console.log('Image deleted successfully:', result);
+            return result;
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            throw error;
+        }
+      
+      }
+
     // Delete associated image from Cloudinary
     if (post.featuredImg) {
         try {
-            // Extract public_id from Cloudinary URL and delete
-            const publicId = post.featuredImg.split('/').pop().split('.')[0];
+            // Extract public_id from Cloudinary URL
+            const urlParts = post.featuredImg.split('/');
+            const publicId = urlParts[urlParts.length - 1].split('.')[0];
             await deleteFromCloudinary(publicId);
         } catch (error) {
             console.error("Error deleting image from Cloudinary:", error);
