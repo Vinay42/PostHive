@@ -3,7 +3,7 @@ import conf from '../conf/conf.js';
 
 import axios from 'axios';
 const API_BASE_URL = "http://localhost:8000/api/v1/users"
-const API_BASE_URL_2 = "https://post-hive-backend.vercel.app/api/v1/users"
+// const API_BASE_URL = "https://post-hive-backend.vercel.app/api/v1/users"
 
 
 export class AuthService {
@@ -11,7 +11,7 @@ export class AuthService {
 
     constructor() {
             this.axios = axios.create({
-                baseURL: API_BASE_URL,API_BASE_URL_2,
+                baseURL: API_BASE_URL,
                 withCredentials: true // Important for handling cookies
             });
             
