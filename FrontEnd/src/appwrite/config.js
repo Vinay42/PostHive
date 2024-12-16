@@ -312,8 +312,8 @@
 
 import axios from 'axios';
 
-// const API_BASE_URL = "http://localhost:8000/api/v1/post";
-const API_BASE_URL = "https://post-hive-backend.vercel.app/api/v1/post";
+const API_BASE_URL = "http://localhost:8000/api/v1/post";
+// const API_BASE_URL_2 = "https://post-hive-backend.vercel.app/api/v1/post";
 
 export class Service {
     constructor() {

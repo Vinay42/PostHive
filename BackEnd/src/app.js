@@ -17,11 +17,10 @@ app.use(express.json({limit: "16kb"}))
 app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
+
+// Add basic health check route
+app.get('/', (req, res) => {
+    res.status(200).json({ message: "Server is running" });
 });
 
 
