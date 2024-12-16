@@ -60,6 +60,9 @@ const registerUser = asyncHandler( async (req, res) => {
         username: username.toLowerCase()
     })
 
+    console.log(user)
+
+
     const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(user._id)
 
 
