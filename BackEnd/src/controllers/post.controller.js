@@ -50,10 +50,11 @@ const createPost = asyncHandler(async (req, res) => {
     const { title, content, status = "active" } = req.body;
     const featuredImgPath = req.file?.path;
     const userId = req.user._id;
-    console.log(featuredImgPath)
+    console.log(title)
     //   console.log("at backend/createpost")
 
     // Validation
+    // console.log(featuredImg)
     if (!title?.trim() || !content?.trim()) {
         throw new ApiError(400, "Title and content are required");
     }

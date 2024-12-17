@@ -46,8 +46,8 @@ function Home() {
             <div className="w-full py-8 mt-4 text-center">
                 <Container>
                     <div className="flex flex-wrap">
-                        <div className="p-2 w-full">
-                            <h1 className="text-2xl font-bold">
+                        <div className="p-2 w-full h-64 flex items-center justify-center">
+                            <h1 className="text-2xl font-bold ">
                                 Loading posts...
                             </h1>
                         </div>
@@ -64,7 +64,7 @@ function Home() {
                 <Container>
                     <div className="flex flex-wrap">
                         <div className="p-2 w-full">
-                            <h1 className="text-2xl font-bold text-red-600">
+                            <h1 className="text-2xl font-bold text-red-600 h-64">
                                 {error}
                             </h1>
                         </div>

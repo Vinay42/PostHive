@@ -359,7 +359,11 @@ export class Service {
         // console.log(req.user)
         try {
             // console.log(formData)
-            const response = await this.axios.post('/posts', formData);
+            const response = await this.axios.post('/posts', formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
             console.log(response)
             return response.data;
         } catch (error) {

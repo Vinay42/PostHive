@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, PostCard } from '../components'
 import appwriteService from "../appwrite/config";
-import service from '../appwrite/auth';
 
 function AllPosts() {
     const [posts, setPosts] = useState([])
@@ -48,20 +47,35 @@ function AllPosts() {
     // posts.forEach(post => {
     //     console.log(post.featuredImg);
     // });
-  return (
-    <div className='w-full py-8'>
-        <Container>
-            <div className='flex flex-wrap'>
-                {posts.map((post) => {
-                    // console.log("hii: ",posts)
-                   return (<div key={post._id} className='p-2 w-1/4'>
-                        <PostCard {...post} />
-                    </div>)
-})}
-            </div>
+    return (
+        <div className='w-full py-8'>
+            <Container>
+                {/* <div className='flex flex-wrap'>
+                    {posts.map((post) => {
+                        // console.log("hii: ",posts)
+                        return (<div key={post._id} className='p-2 w-1/4'>
+                            <PostCard {...post} />
+                        </div>)
+                    })}
+                </div> */}
+                {posts.length > 0 ? (
+          <div className="flex flex-wrap">
+            {posts.map((post) => (
+              <div key={post._id} className="p-2 w-1/4">
+                <PostCard {...post} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-center h-64">
+            <p className="text-xl text-black font-bold">
+              You have not created any posts yet. Start by creating a new post!
+            </p>
+          </div>
+        )}
             </Container>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default AllPosts

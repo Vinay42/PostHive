@@ -120,9 +120,9 @@ export const verifyJWT = asyncHandler(async(req, res, next) => {
         }
 
         // Debug logs
-        console.log("Auth Header:", req.headers["authorization"]);
-        console.log("Final Token Found:", token ? "Yes" : "No");
-        console.log("Cookie Header:", req.headers.cookie);
+        // console.log("Auth Header:", req.headers["authorization"]);
+        // console.log("Final Token Found:", token ? "Yes" : "No");
+        // console.log("Cookie Header:", req.headers.cookie);
 
         if (!token) {
             throw new ApiError(401, "Authentication failed: No token provided");

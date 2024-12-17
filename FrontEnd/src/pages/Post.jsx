@@ -15,12 +15,12 @@ export default function Post() {
     // console.log("userdata :::: ",userData.userData._id)
     // console.log(post.userId)
     let isAuthor
-    if(userData?.userData?.isAdmin){
-        isAuthor= true
-    }else{
-        isAuthor = post && userId  ? post.userId === userData.userData._id : false;
+    if (userData?.userData?.isAdmin) {
+        isAuthor = true
+    } else {
+        isAuthor = post && userId ? post.userId === userData.userData._id : false;
     }
-    
+
     // console.log(isAuthor)
     // console.log(userData)
 
@@ -48,9 +48,9 @@ export default function Post() {
     };
 
     return post ? (
-        <div className="py-8">
-            <Container>
-                <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
+        <div className="py-8 flex justify-center">
+            <div className="flex flex-col items-center max-w-7xl mx-auto px-4 ">
+                <div className="flex max-w-xs justify-center items-center mb-4 relative border rounded-xl p-2">
                     <img
                         src={post.featuredImg}
                         alt={post.title}
@@ -60,7 +60,7 @@ export default function Post() {
                     {isAuthor && (
                         <div className="absolute right-6 top-6">
                             <Link to={`/edit-post/${post.slug}`}>
-                                <Button bgColor="bg-green-500" className="mr-3">
+                                <Button bgColor="bg-green-500" className="mr-1">
                                     Edit
                                 </Button>
                             </Link>
@@ -70,13 +70,15 @@ export default function Post() {
                         </div>
                     )}
                 </div>
-                <div className="w-full mb-6">
-                    <h1 className="text-2xl font-bold">{post.title}</h1>
-                </div>
-                <div className="browser-css">
-                    {parse(post.content)}
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                    <div className="w-full mb-6 text-center">
+                        <h1 className="text-2xl font-bold">{post.title}</h1>
                     </div>
-            </Container>
+                    <div className="browser-css">
+                        {parse(post.content)}
+                    </div>
+                </div>
+            </div>
         </div>
     ) : null;
 }
