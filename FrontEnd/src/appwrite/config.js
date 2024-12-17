@@ -312,17 +312,28 @@
 
 import axios from 'axios';
 
-// const API_BASE_URL = "http://localhost:8000/api/v1/post";
-const API_BASE_URL = "https://post-hive-backend.vercel.app/api/v1/post";
+const API_BASE_URL = "http://localhost:8000/api/v1/post";
+// const API_BASE_URL = "https://post-hive-backend.vercel.app/api/v1/post";
 
 export class Service {
     constructor() {
         this.axios = axios.create({
             baseURL: API_BASE_URL,
             withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json'
+            
+        });
+
+        // Add request interceptor to include token
+        this.axios.interceptors.request.use((config) => {
+            const token = localStorage.getItem('accessToken');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+                // Don't override content-type for multipart/form-data
+                if (!config.headers['Content-Type']?.includes('multipart/form-data')) {
+                    config.headers['Content-Type'] = 'application/json';
+                }
             }
+            return config;
         });
 
         // Add response interceptor for error handling
@@ -335,33 +346,6 @@ export class Service {
         );
     }
 
-    // async createPost({ title, content, featuredImg, status }) {
-    //     try {
-
-    //         // Create FormData for file upload
-    //         const formData = new FormData();
-    //         formData.append('title', title);
-    //         formData.append('content', content);
-    //         formData.append('status', status);
-    //         console.log("at createPost")
-
-    //         // If featuredImg is a File object, append it
-    //             formData.append('featuredImg', featuredImg);
-
-
-    //         const response = await this.axios.post('/posts', formData, {
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data'
-    //             }
-    //         });
-    //         console.log(response)
-
-    //         return response.data;
-    //     } catch (error) {
-    //         console.error("Create post error:", error);
-    //         throw error;
-    //     }
-    // }
 
     getFilePreview(fileId) {
         return 0;
@@ -390,19 +374,7 @@ export class Service {
 
     async updatePost(slug,formData) {
         try {
-            // for (let pair of formData.entries()) {
-            //     console.log(pair[0], pair[1]);
-            // }
-
-            // // Only append fields that are provided
-            // if (title) formData.append('title', title);
-            // if (content) formData.append('content', content);
-            // if (status) formData.append('status', status);
-
-            // // If featuredImg is a File object, append it
-            // if (featuredImg instanceof File) {
-            //     formData.append('featuredImg', featuredImg);
-            // }
+            
 
             const response = await this.axios.patch(`/posts/${slug}`, formData, {
                 headers: {
@@ -438,24 +410,6 @@ export class Service {
         }
     }
 
-    // async getPosts(page = 1, limit = 10, search = '') {
-    //     try {
-    //         const params = new URLSearchParams({
-    //             page: page.toString(),
-    //             limit: limit.toString()
-    //         });
-
-    //         if (search) {
-    //             params.append('search', search);
-    //         }
-
-    //         const response = await this.axios.get(`/posts?${params.toString()}`);
-    //         return response.data;
-    //     } catch (error) {
-    //         console.error("Get posts error:", error);
-    //         throw error;
-    //     }
-    // }
 
     async getPosts() {
                 try {

@@ -2,8 +2,8 @@ import conf from '../conf/conf.js';
 // import { Client, Account, ID } from "appwrite";
 
 import axios from 'axios';
-// const API_BASE_URL = "http://localhost:8000/api/v1/users"
-const API_BASE_URL = "https://post-hive-backend.vercel.app/api/v1/users"
+const API_BASE_URL = "http://localhost:8000/api/v1/users"
+// const API_BASE_URL = "https://post-hive-backend.vercel.app/api/v1/users"
 
 
 export class AuthService {
@@ -13,6 +13,14 @@ export class AuthService {
             this.axios = axios.create({
                 baseURL: API_BASE_URL,
                 withCredentials: true // Important for handling cookies
+            });
+
+            this.axios.interceptors.request.use((config) => {
+                const token = localStorage.getItem('accessToken');
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+                return config;
             });
             
     }
@@ -64,9 +72,10 @@ export class AuthService {
 
     async getCurrentUser() {
         try {
-            const response = await this.axios.get('/current-user', {
-                headers: this.#getAuthHeaders()
-            });
+            // const response = await this.axios.get('/current-user', {
+            //     headers: this.#getAuthHeaders()
+            // });
+            const response = await this.axios.get('/current-user');
             return response.data.data;
         } catch (error) {
             console.error("Get current user error:", error.response?.data || error.message);
@@ -85,9 +94,10 @@ export class AuthService {
     async logout() {
 
         try {
-            await this.axios.post('/logout', {}, {
-                headers: this.#getAuthHeaders()
-            });
+            await this.axios.post('/logout');
+            // await this.axios.post('/logout', {}, {
+            //     headers: this.#getAuthHeaders()
+            // });
             localStorage.removeItem('accessToken');
         } catch (error) {
             console.error("Logout error:", error.response?.data || error.message);
