@@ -13,14 +13,20 @@ import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
 
 router.route("/posts")
-  .post(verifyJWT, upload.single("featuredImg"), createPost)
+  .post(verifyJWT,  createPost)
   .get(getAllPosts);
+// router.route("/posts")
+//   .post(verifyJWT, upload.single("featuredImg"), createPost)
+//   .get(getAllPosts);
 
 router.route("/get-post/:slug").get(getPost)  
 
 router.route("/my-posts")
   .get(verifyJWT, getUserPosts);
 
+router.route("/posts/:slug")
+  .patch(verifyJWT,  updatePost)
+  .delete(verifyJWT, deletePost);
 router.route("/posts/:slug")
   .patch(verifyJWT, upload.single("featuredImg"), updatePost)
   .delete(verifyJWT, deletePost);

@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { v2 as cloudinary } from 'cloudinary';
+import { PassThrough } from 'stream';
 
 // const createPost = asyncHandler(async (req, res) => {
 //   const { title, content,status } = req.body;
@@ -48,9 +49,9 @@ import { v2 as cloudinary } from 'cloudinary';
 
 const createPost = asyncHandler(async (req, res) => {
     const { title, content, status = "active" } = req.body;
-    const featuredImgPath = req.file?.path;
+    // const featuredImgPath = req.file?.path;
     const userId = req.user._id;
-    console.log(title)
+    // console.log(title)
     //   console.log("at backend/createpost")
 
     // Validation
@@ -59,9 +60,15 @@ const createPost = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Title and content are required");
     }
 
-    if (!featuredImgPath) {
+    // if (!featuredImgPath) {
+    //     throw new ApiError(400, "Featured image is required");
+    // }
+
+    if (!req.files || !req.files.featuredImg) {
         throw new ApiError(400, "Featured image is required");
     }
+
+    const featuredImgFile = req.files.featuredImg;
 
     // Create URL-friendly slug
     const slug = title
@@ -77,11 +84,31 @@ const createPost = asyncHandler(async (req, res) => {
 
     // Upload image
     let featuredImg = null;
+    // try {
+    //     const uploadedImage = await uploadOnCloudinary(featuredImgPath);
+    //     featuredImg = uploadedImage.url;
+    // } catch (error) {
+    //     throw new ApiError(500, "Error uploading image");
+    // }
+
     try {
-        const uploadedImage = await uploadOnCloudinary(featuredImgPath);
-        featuredImg = uploadedImage.url;
+        const streamUpload = (buffer) => {
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream((error, result) => {
+                    if (error) reject(new ApiError(500, "Error uploading image"));
+                    else resolve(result);
+                });
+                const bufferStream = new PassThrough();
+                bufferStream.end(buffer);
+                bufferStream.pipe(stream);
+            });
+        };
+    
+        // Upload image
+        const uploadedImage = await streamUpload(featuredImgFile.data);
+        featuredImg = uploadedImage.secure_url;
     } catch (error) {
-        throw new ApiError(500, "Error uploading image");
+        throw new ApiError(500, error.message || "Error uploading image");
     }
 
     // Create post
@@ -254,9 +281,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
 
 const updatePost = asyncHandler(async (req, res) => {
     const { slug } = req.params;
-    // console.log(slug)
     const { title, content, status } = req.body;
-    const featuredImgPath = req.file?.path;
     const userId = req.user._id;
     //   console.log(featuredImg)
 
@@ -287,17 +312,25 @@ const updatePost = asyncHandler(async (req, res) => {
             throw new ApiError(400, "A post with this title already exists");
         }
     }
-    let featuredImg
-    let featuredImgNew = null;
-    if (featuredImgPath) {
-        
-        try {
-            const uploadedImage = await uploadOnCloudinary(featuredImgPath);
-            featuredImgNew = uploadedImage.url;
-        } catch (error) {
-            throw new ApiError(500, "Error uploading image");
+        // Handle image upload if a new image is provided
+        let featuredImgNew = post.featuredImg; // Keep the existing image by default
+        if (req.files && req.files.featuredImg) {
+            const featuredImgFile = req.files.featuredImg;
+    
+            try {
+                const uploadedImage = await cloudinary.uploader.upload_stream({}, (error, result) => {
+                    if (error) throw new ApiError(500, "Error uploading image");
+                    featuredImgNew = result.secure_url;
+                });
+    
+                // Stream the file to Cloudinary
+                const bufferStream = new PassThrough();
+                bufferStream.end(featuredImgFile.data);
+                bufferStream.pipe(uploadedImage);
+            } catch (error) {
+                throw new ApiError(500, error.message || "Error uploading image");
+            }
         }
-    }
 
     // Update post
     const updatedPost = await Post.findOneAndUpdate(
@@ -305,7 +338,7 @@ const updatePost = asyncHandler(async (req, res) => {
         {
             title: title || post.title,
             content: content || post.content,
-            featuredImg : featuredImgNew || post.featuredImg,
+            featuredImg : featuredImgNew ,
             status: status || post.status,
             slug: newSlug
         },
@@ -316,6 +349,71 @@ const updatePost = asyncHandler(async (req, res) => {
         new ApiResponse(200, updatedPost, "Post updated successfully")
     );
 });
+
+// const updatePost = asyncHandler(async (req, res) => {
+//     const { slug } = req.params;
+//     // console.log(slug)
+//     const { title, content, status } = req.body;
+//     const featuredImgPath = req.file?.path;
+//     const userId = req.user._id;
+//     //   console.log(featuredImg)
+
+//     // Find post and check ownership
+//     const post = await Post.findOne({ slug });
+//     if (!post) {
+//         throw new ApiError(404, "Post not found");
+//     }
+
+//     if (!post.userId.equals(userId) && !req.user.isAdmin) {
+//         throw new ApiError(403, "Not authorized to update this post");
+//     }
+
+//     // Handle slug update if title changes
+//     let newSlug = post.slug;
+//     if (title && title !== post.title) {
+//         newSlug = title
+//             .toLowerCase()
+//             .replace(/[^a-zA-Z0-9\s]/g, '')
+//             .replace(/\s+/g, '-');
+
+//         const slugExists = await Post.findOne({
+//             slug: newSlug,
+//             _id: { $ne: post.userId }
+//         });
+
+//         if (slugExists) {
+//             throw new ApiError(400, "A post with this title already exists");
+//         }
+//     }
+//     let featuredImg
+//     let featuredImgNew = null;
+//     if (featuredImgPath) {
+        
+//         try {
+//             const uploadedImage = await uploadOnCloudinary(featuredImgPath);
+//             featuredImgNew = uploadedImage.url;
+//         } catch (error) {
+//             throw new ApiError(500, "Error uploading image");
+//         }
+//     }
+
+//     // Update post
+//     const updatedPost = await Post.findOneAndUpdate(
+//         { slug },
+//         {
+//             title: title || post.title,
+//             content: content || post.content,
+//             featuredImg : featuredImgNew || post.featuredImg,
+//             status: status || post.status,
+//             slug: newSlug
+//         },
+//         { new: true }
+//     )
+
+//     return res.status(200).json(
+//         new ApiResponse(200, updatedPost, "Post updated successfully")
+//     );
+// });
 
 
 // const deletePost = asyncHandler(async (req, res) => {
