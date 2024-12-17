@@ -413,11 +413,7 @@ export class Service {
 
     async getPosts() {
                 try {
-                    const response = await this.axios.get("/posts", {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    });
+                    const response = await this.axios.get("/posts");
         
                     // Return the fetched post data
                     return response.data;
