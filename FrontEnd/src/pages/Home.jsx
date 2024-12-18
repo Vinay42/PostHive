@@ -96,7 +96,7 @@ function Home() {
                     {posts.map((post) => {
                         // console.log(post)
                         return (
-                            <div key={post._id} className='p-2 w-1/4'>
+                            <div key={post._id} className='p-2 w-1/4 '>
                                 <PostCard {...post} />
                             </div>
                         )

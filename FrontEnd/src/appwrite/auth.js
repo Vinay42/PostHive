@@ -35,11 +35,8 @@ export class AuthService {
             // if (coverImage) formData.append('coverImage', coverImage);
             // formData.append('username', email.split('@')[0]); // Creating username from email
 
-            const response = await this.axios.post('/register', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                }
-            });
+            const response = await this.axios.post('/register', formData);
+            console.log(response)
 
             if (response.data) {
                 // Automatically log in after successful registration
