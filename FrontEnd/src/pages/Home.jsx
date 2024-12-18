@@ -148,7 +148,7 @@ function Home() {
     if (!userStatus) return <LoginPrompt />;
 
     return (
-        <div className='w-full py-8 bg-gray-50'>
+        <div className='w-full py-8 bg-blue-100'>
             <Container>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
                 {posts.length === 0 ? (

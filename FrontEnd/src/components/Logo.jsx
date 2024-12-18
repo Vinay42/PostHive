@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
 
-function Logo({width='100px'}) {
+const Logo = () => {
   return (
-    <div>Logo</div>
-  )
-}
+    <div className=" text-white px-2 py-1 rounded-lg font-bold text-2xl sm:text-3xl md:text-4xl">
+      Post Hive
+    </div>
+  );
+};
 
-export default Logo
+export default Logo;
