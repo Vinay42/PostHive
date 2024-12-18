@@ -55,7 +55,7 @@ export default  function Post() {
         // Function to check author status
         const checkAuthorStatus = () => {
             // If user is an admin, always allow edit/delete
-            if (userData?.userData?.isAdmin) {
+            if (userData?.isAdmin) {
                 setIsAuthor(true);
                 return true;
             }
@@ -65,12 +65,12 @@ export default  function Post() {
             // console.log("post: ",post)
 
             // Check if the current user is the post's author
-            if (!post || !userData?.userData?._id) {
+            if (!post || !userData?._id) {
                 setIsAuthor(false);
                 return false;
             }
 
-            const authorStatus = post.userId === userData.userData?._id;
+            const authorStatus = post.userId === userData._id;
             setIsAuthor(authorStatus);
             return authorStatus;
         };
