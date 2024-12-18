@@ -1,42 +1,101 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import service from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 
-export default function Post() {
+export default  function Post() {
     const [post, setPost] = useState(null);
+    const [isAuthor, setIsAuthor] = useState(false);
     const { slug } = useParams();
     const navigate = useNavigate();
 
-    const userData = useSelector((state) => state.auth.userData);
-    const userId = userData?.userData?._id;
+    const userData =  useSelector((state) => state.auth.userData);
+    // const userId = userData?.userData?._id;
     // console.log("userdata :::: ",userData.userData._id)
     // console.log(post.userId)
-    let isAuthor
-    if (userData?.userData?.isAdmin) {
-        isAuthor = true
-    } else {
-        isAuthor = post && userId ? post.userId === userData.userData._id : false;
-    }
+    // let isAuthor
+    // if (userData?.userData?.isAdmin) {
+    //     isAuthor = true
+    // } else {
+    //     isAuthor = post && userId ? post.userId === userData.userData._id : false;
+    // }
+
+    // const isAuthor = useMemo(() => {
+    //     // If user is an admin, always allow edit/delete
+    //     if (userData?.userData?.isAdmin) return true;
+
+    //     // Check if the current user is the post's author
+    //     if (!post || !userData?.userData?._id) return false;
+
+    //     return post.userId === userData.userData._id;
+    // }, [post, userData]);
 
     // console.log(isAuthor)
     // console.log(userData)
 
+    // useEffect(() => {
+    //     if (!userData) {
+    //         navigate("/");
+    //         return;
+    //     }
+    //     if (slug) {
+    //         service.getPost(slug).then((post) => {
+    //             // console.log(post)
+    //             if (post) setPost(post);
+    //             else navigate("/");
+    //         });
+    //     } else navigate("/");
+    // }, [slug, navigate, userData]);
+
     useEffect(() => {
+        // Function to check author status
+        const checkAuthorStatus = () => {
+            // If user is an admin, always allow edit/delete
+            if (userData?.isAdmin) {
+                setIsAuthor(true);
+                return true;
+            }
+
+            // console.log("userdata ::  ",userData?.isAdmin)
+            // console.log("post: ",post)
+
+            // Check if the current user is the post's author
+            if (!post || !userData?._id) {
+                setIsAuthor(false);
+                return false;
+            }
+
+            const authorStatus = post.userId === userData._id;
+            setIsAuthor(authorStatus);
+            return authorStatus;
+        };
+
+        // If no user is logged in, redirect to home
         if (!userData) {
             navigate("/");
             return;
         }
+
+        // Fetch post if slug exists
         if (slug) {
-            service.getPost(slug).then((post) => {
-                // console.log(post)
-                if (post) setPost(post);
-                else navigate("/");
+            service.getPost(slug).then((fetchedPost) => {
+                if (fetchedPost) {
+                    setPost(fetchedPost);
+                    // Check author status after post is set
+                    checkAuthorStatus();
+                } else {
+                    navigate("/");
+                }
+            }).catch((error) => {
+                console.error("Error fetching post:", error);
+                navigate("/");
             });
-        } else navigate("/");
-    }, [slug, navigate, userData]);
+        } else {
+            navigate("/");
+        }
+    }, [slug, navigate, userData, post]);
 
     const deletePost = async () => {
         try {
