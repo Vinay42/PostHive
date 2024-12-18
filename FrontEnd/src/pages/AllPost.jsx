@@ -168,6 +168,10 @@ function AllPosts() {
         }
 
         fetchPosts()
+
+            window.scrollTo(0, 0);
+
+
     }, [])
 
     // Loading State

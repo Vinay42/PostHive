@@ -84,7 +84,7 @@ function Header() {
               ) : null
             )}
             {authStatus && (
-              <li>
+              <li  className='text-lg'>
                 <LogoutBtn />
               </li>
             )}
@@ -107,8 +107,8 @@ function Header() {
                   ) : null
                 )}
                 {authStatus && (
-                  <li className='w-full text-center'>
-                    <LogoutBtn />
+                  <li className='w-full px-6 py-3 text-white font-medium hover:bg-teal-600 transition-colors'>
+                    <LogoutBtn className='text-base font-medium'/>
                   </li>
                 )}
               </ul>

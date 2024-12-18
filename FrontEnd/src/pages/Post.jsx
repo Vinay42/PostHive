@@ -11,6 +11,8 @@ export default  function Post() {
     const { slug } = useParams();
     const navigate = useNavigate();
 
+    
+
     const userData =  useSelector((state) => state.auth.userData);
     // const userId = userData?.userData?._id;
     // console.log("userdata :::: ",userData.userData._id)
@@ -98,6 +100,11 @@ export default  function Post() {
         }
     }, [slug, navigate, userData, post]);
 
+    useEffect(() => {
+        // Scroll to top when component mounts
+        window.scrollTo(0, 0);
+      }, []);
+
     const deletePost = async () => {
         try {
             await service.deletePost(post.slug); // Make sure `service.deletePost` returns a promise
@@ -106,6 +113,8 @@ export default  function Post() {
             console.log("Error at delete: ", error);
         }
     };
+
+    
 
     return post ? (
         <div className="py-8 flex justify-center">
