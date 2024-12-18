@@ -208,7 +208,7 @@ function Footer() {
         {/* Social Media Links */}
         <div className="mt-4 sm:mt-8 pt-4 sm:pt-8 border-t border-teal-600 flex flex-wrap justify-center space-x-4">
           <a 
-            href="https://linkedin.com" 
+            href="https://www.linkedin.com/in/vinay-thakor-05a2952a5/" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-xs sm:text-sm text-teal-100 hover:text-white transition-colors duration-300"
@@ -216,7 +216,7 @@ function Footer() {
             LinkedIn
           </a>
           <a 
-            href="https://github.com" 
+            href="https://github.com/Vinay42" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-xs sm:text-sm text-teal-100 hover:text-white transition-colors duration-300"
