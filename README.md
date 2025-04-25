@@ -37,7 +37,7 @@ PostHive is a social media platform designed to provide users with a seamless ex
 ### Frontend
 - React.js
 - React Router for navigation
-- CSS/SCSS for styling
+- CSS for styling
 - Axios for API requests
 
 ### Backend
