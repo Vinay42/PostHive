@@ -79,12 +79,19 @@ npm install
 3. Set up environment variables
 ```bash
 # In the server directory, create a .env file with the following variables
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
+PORT=8000
+MONGODB_URI=
+ACCESS_TOKEN_SECRET=
+ACCESS_TOKEN_EXPIRY=1d
+REFRESH_TOKEN_SECRET=
+REFRESH_TOKEN_EXPIRY=10d
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 
 # In the client directory, create a .env file with the following variables
-REACT_APP_API_URL=http://localhost:5000/api
+VITE_API_BASE_URL = http://localhost:8000/api/v1
 ```
 
 4. Run the application
