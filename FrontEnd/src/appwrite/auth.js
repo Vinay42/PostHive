@@ -1,17 +1,15 @@
 import conf from '../conf/conf.js';
-// import { Client, Account, ID } from "appwrite";
+// ...existing code...
 
 import axios from 'axios';
-// const API_BASE_URL = "http://localhost:8000/api/v1/users"
-const API_BASE_URL = "https://post-hive-backend.vercel.app/api/v1/users"
-
+const path= import.meta.env.VITE_API_BASE_URL
 
 export class AuthService {
    
 
     constructor() {
             this.axios = axios.create({
-                baseURL: API_BASE_URL,
+                baseURL: `${path}/users`,
                 withCredentials: true // Important for handling cookies
             });
 
