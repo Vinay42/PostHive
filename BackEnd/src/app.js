@@ -24,7 +24,7 @@ app.use(expressFileUpload());
 
 // Add basic health check route
 app.get('/', (req, res) => {
-    res.status(200).json({ message: "Server is now running" });
+    res.status(200).json({ message: "Server is running now" });
 });
 
 
