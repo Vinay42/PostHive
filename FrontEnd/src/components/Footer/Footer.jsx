@@ -187,7 +187,7 @@ function Footer() {
                 <p className="text-xs sm:text-sm text-teal-100">Account</p>
                 <p className="text-xs sm:text-sm text-teal-100">Help</p>
                 <p className="text-xs sm:text-sm text-teal-100">Contact Us</p>
-                <p className="text-xs sm:text-sm text-teal-100">Customer Support</p>
+                <p className="text-xs sm:text-sm text-teal-100">Customer Suppor t</p>
               </div>
             </div>
 

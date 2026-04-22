@@ -15,8 +15,7 @@ export default function RTE({name, control, label, defaultValue =""}) {
         <Editor
         initialValue={defaultValue}
         init={{
-            initialValue: defaultValue,
-            apiKey: 'YOUR_API_KEY', // Replace with your valid API key,
+            apiKey: import.meta.env.VITE_TINY_MCE, 
             height: 500,
             menubar: true,
             plugins: [

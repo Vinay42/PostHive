@@ -25,8 +25,9 @@ const startServer = async () => {
         
         // Only start the server if not in Vercel
         if (process.env.NODE_ENV !== 'production') {
-            app.listen(process.env.PORT || 8000, () => {
-                console.log(`⚙️ Server running on port : ${process.env.PORT}`);
+            const port = process.env.PORT || 3005;
+            app.listen(port, () => {
+                console.log(`⚙️ Server running on port : ${port}`);
             });
         }
     } catch (err) {

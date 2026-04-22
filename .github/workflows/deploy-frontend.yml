@@ -1,0 +1,28 @@
+name: Deploy to Azure VM
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'FrontEnd/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: azureuser
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/azureuser/PostHive/FrontEnd
+            git pull origin main
+            npm install
+            npm run build
+            sudo rm -rf /var/www/posthive/frontend/*
+            sudo cp -r dist/* /var/www/posthive/frontend
+            sudo systemctl reload nginx
