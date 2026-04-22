@@ -19,7 +19,9 @@ jobs:
           username: azureuser
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/azureuser/PostHive/BackEnd
-            git pull origin main
-            npm install
+            cd /home/azureuser/PostHive
+            git fetch origin main
+            git reset --hard origin/main
+            cd BackEnd
+            npm ci
             pm2 restart posthive-backend --update-env || pm2 start src/index.js

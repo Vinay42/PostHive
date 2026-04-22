@@ -19,9 +19,11 @@ jobs:
           username: azureuser
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/azureuser/PostHive/FrontEnd
-            git pull origin main
-            npm install
+            cd /home/azureuser/PostHive
+            git fetch origin main
+            git reset --hard origin/main
+            cd FrontEnd
+            npm ci
             npm run build
             sudo rm -rf /var/www/posthive/frontend/*
             sudo cp -r dist/* /var/www/posthive/frontend
