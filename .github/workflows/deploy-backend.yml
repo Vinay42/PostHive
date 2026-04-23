@@ -23,5 +23,5 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd BackEnd
-            npm ci
+            npm install
             pm2 restart posthive-backend --update-env || pm2 start src/index.js

@@ -23,7 +23,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             cd FrontEnd
-            npm ci
+            npm install
             npm run build
             sudo rm -rf /var/www/posthive/frontend/*
             sudo cp -r dist/* /var/www/posthive/frontend

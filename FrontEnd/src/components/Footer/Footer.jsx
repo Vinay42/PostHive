@@ -186,8 +186,8 @@ function Footer() {
               <div className="space-y-1 sm:space-y-3">
                 <p className="text-xs sm:text-sm text-teal-100">Account</p>
                 <p className="text-xs sm:text-sm text-teal-100">Help</p>
-                <p className="text-xs sm:text-sm text-teal-100">Contact U s</p>
-                <p className="text-xs sm:text-sm text-teal-100">Customer Suppor t</p>
+                <p className="text-xs sm:text-sm text-teal-100">Contact Us</p>
+                <p className="text-xs sm:text-sm text-teal-100">Customer Support</p>
               </div>
             </div>
 
